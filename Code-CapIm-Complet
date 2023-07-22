@@ -1,0 +1,47 @@
+#include <Bridge.h>
+#include <WiFiServer.h>
+
+WiFiServer server(80);
+
+void setup() {
+  Bridge.begin();
+  server.begin();
+}
+
+void loop() {
+  WiFiClient client = server.available();
+
+  if (client) {
+    while (client.connected()) {
+      if (client.available()) {
+        String request = client.readStringUntil('\r');
+        client.flush();
+
+        if (request.indexOf("/capture_image") != -1) {
+          // Appel de la fonction pour capturer une image
+          captureImage();
+        } else if (request.indexOf("/capture_video") != -1) {
+          // Appel de la fonction pour capturer une vidéo
+          captureVideo();
+        }
+
+        client.println("HTTP/1.1 200 OK");
+        client.println("Content-Type: text/html");
+        client.println("");
+        client.println("<html><body>OK</body></html>");
+        break;
+      }
+    }
+    client.stop();
+  }
+}
+
+void captureImage() {
+  // Code pour capturer une image avec la caméra de l'ordinateur
+  // et l'envoyer vers OneDrive
+}
+
+void captureVideo() {
+  // Code pour capturer une vidéo avec la caméra de l'ordinateur
+  // et l'envoyer vers OneDrive
+}
