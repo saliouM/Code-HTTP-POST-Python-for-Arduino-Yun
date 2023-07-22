@@ -1,0 +1,28 @@
+from onedrivesdk import HttpProvider, Client, Authenticator
+
+def upload_to_onedrive(file_path, client_id, client_secret, redirect_uri, refresh_token):
+    http_provider = HttpProvider()
+    auth = Authenticator(http_provider=http_provider, client_id=client_id, client_secret=client_secret, redirect_uri=redirect_uri)
+    auth.refresh_token = refresh_token
+
+    client = Client(auth, http_provider=http_provider)
+    client.auth_provider.refresh_token = refresh_token
+
+    try:
+        with open(file_path, "rb") as file:
+            client.item(drive="me", path="/Pictures/" + file_path).upload(file)
+        print("Fichier envoyé avec succès sur OneDrive.")
+    except Exception as e:
+        print(f"Erreur lors de l'envoi du fichier sur OneDrive : {e}")
+
+# Remplace les valeurs ci-dessous par les informations d'authentification correctes
+client_id = "TON_CLIENT_ID"
+client_secret = "TON_CLIENT_SECRET"
+redirect_uri = "http://localhost"
+refresh_token = "TON_REFRESH_TOKEN"
+
+file_path_image = "capture.jpg"
+file_path_video = "video.mp4"
+
+upload_to_onedrive(file_path_image, client_id, client_secret, redirect_uri, refresh_token)
+upload_to_onedrive(file_path_video, client_id, client_secret, redirect_uri, refresh_token)
