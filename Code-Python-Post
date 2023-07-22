@@ -1,0 +1,17 @@
+import requests
+
+client_id = "TON_CLIENT_ID"
+client_secret = "TON_CLIENT_SECRET"
+code = "LE_CODE_OBTENU_PRECEDEMMENT"
+
+data = {
+    "grant_type": "authorization_code",
+    "client_id": client_id,
+    "client_secret": client_secret,
+    "code": code,
+    "redirect_uri": "http://localhost"
+}
+
+response = requests.post("https://login.microsoftonline.com/common/oauth2/v2.0/token", data=data)
+refresh_token = response.json()["refresh_token"]
+print("Refresh Token:", refresh_token)
