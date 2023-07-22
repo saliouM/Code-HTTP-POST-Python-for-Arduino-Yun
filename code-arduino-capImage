@@ -1,0 +1,33 @@
+#include <Bridge.h>
+
+void setup() {
+  Bridge.begin();
+}
+
+void loop() {
+  // Ton code pour la détection de mouvement avec le capteur PIR ici
+
+  if (detection_de_mouvement) {
+    captureImage();
+    delay(1000); // Délai pour éviter les captures trop fréquentes en cas de détection continue
+    captureVideo();
+  }
+}
+
+void captureImage() {
+  Process p;
+  p.begin("cmd");
+  p.addParameter("/c");
+  p.addParameter("ffmpeg -f dshow -i video=\"Nom de ta webcam\" -frames:v 1 capture.jpg");
+  p.run();
+  p.end();
+}
+
+void captureVideo() {
+  Process p;
+  p.begin("cmd");
+  p.addParameter("/c");
+  p.addParameter("ffmpeg -f dshow -i video=\"Nom de ta webcam\" -t 5 video.mp4");
+  p.run();
+  p.end();
+}
